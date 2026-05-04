@@ -46,7 +46,7 @@ class CadastroCandidatoForm(forms.ModelForm):
             'nome_mae': forms.TextInput(attrs={'class': 'form-control'}),
             'nome_pai': forms.TextInput(attrs={'class': 'form-control'}),
             'renda_mensal': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'data_nascimento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'data_nascimento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
         }
 
 

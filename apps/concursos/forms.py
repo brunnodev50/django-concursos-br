@@ -18,9 +18,9 @@ class ConcursoForm(forms.ModelForm):
             'cidade': forms.TextInput(attrs={'class': 'form-control'}),
             'vagas_total': forms.NumberInput(attrs={'class': 'form-control'}),
             'taxa_inscricao': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'data_abertura': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'data_fechamento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'data_prova': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'data_abertura': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
+            'data_fechamento': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
+            'data_prova': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
             'status': forms.Select(attrs={'class': 'form-select'}),
         }
 
