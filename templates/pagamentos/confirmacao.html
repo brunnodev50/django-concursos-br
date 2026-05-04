@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block title %}Confirmação de Pagamento{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7 col-lg-6">
+
+    {% if pagamento.status == 'pago' %}
+    <!-- ======== PAGO ======== -->
+    <div class="card shadow text-center">
+      <div class="card-body p-5">
+        <div class="mb-3">
+          <i class="bi bi-check-circle-fill text-success" style="font-size:4.5rem"></i>
+        </div>
+        <h3 class="fw-700 text-success">Inscrição Confirmada!</h3>
+        <p class="text-muted">Seu pagamento foi aprovado e sua inscrição está confirmada.</p>
+        <div class="alert alert-success my-4">
+          <div class="small text-muted mb-1">Número de Inscrição</div>
+          <div class="numero-inscricao fs-5">{{ pagamento.candidatura.numero_inscricao }}</div>
+        </div>
+        <p class="text-muted small">
+          Guarde seu número de inscrição. Você também pode consultá-lo em
+          <a href="{% url 'minhas_candidaturas' %}">Minhas Candidaturas</a>.
+        </p>
+        <div class="d-flex gap-2 justify-content-center mt-4">
+          <a href="{% url 'minhas_candidaturas' %}" class="btn btn-primary">
+            <i class="bi bi-clipboard-check me-1"></i>Minhas Candidaturas
+          </a>
+          <a href="{% url 'lista_concursos' %}" class="btn btn-outline-secondary">
+            Ver mais concursos
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% elif pagamento.metodo == 'pix' %}
+    <!-- ======== PIX ======== -->
+    <div class="card shadow">
+      <div class="card-body p-4">
+        <div class="text-center mb-4">
+          <i class="bi bi-qr-code-scan text-success" style="font-size:2.5rem"></i>
+          <h4 class="fw-700 mt-2">Pague via PIX</h4>
+          <p class="text-muted small">Escaneie o QR Code ou copie o código Pix abaixo</p>
+        </div>
+
+        {% if pagamento.pix_qr_code %}
+          <div class="text-center mb-4">
+            <div class="qrcode-container">
+              <img src="data:image/png;base64,{{ pagamento.pix_qr_code }}" alt="QR Code PIX">
+            </div>
+          </div>
+        {% endif %}
+
+        {% if pagamento.pix_qr_code_texto %}
+          <label class="form-label fw-600">Código Pix — Copia e Cola</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control font-monospace" id="pixCode"
+                   value="{{ pagamento.pix_qr_code_texto }}" readonly>
+            <button class="btn btn-outline-success" type="button" onclick="copiarPix()">
+              <i class="bi bi-clipboard" id="copyIcon"></i> Copiar
+            </button>
+          </div>
+        {% endif %}
+
+        <div class="alert alert-warning">
+          <i class="bi bi-clock me-1"></i>
+          <strong>O PIX expira em 30 minutos.</strong> Após o pagamento, a confirmação é automática.
+        </div>
+
+        <div class="alert alert-info mb-0">
+          <div class="small text-muted mb-1">Número de Inscrição (provisório)</div>
+          <span class="numero-inscricao">{{ pagamento.candidatura.numero_inscricao }}</span>
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="{% url 'minhas_candidaturas' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-list-check me-1"></i>Acompanhar em Minhas Candidaturas
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% elif pagamento.metodo == 'boleto' %}
+    <!-- ======== BOLETO ======== -->
+    <div class="card shadow">
+      <div class="card-body p-4">
+        <div class="text-center mb-4">
+          <i class="bi bi-upc-scan text-primary" style="font-size:2.5rem"></i>
+          <h4 class="fw-700 mt-2">Boleto Bancário</h4>
+          <p class="text-muted small">Pague em qualquer banco até a data de vencimento.</p>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle me-1"></i>
+          O boleto vence em <strong>3 dias úteis</strong>. Após o pagamento, pode levar até 2 dias para a confirmação.
+        </div>
+
+        {% if pagamento.boleto_barcode %}
+          <label class="form-label fw-600">Código de Barras</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control font-monospace small" id="barcodeInput"
+                   value="{{ pagamento.boleto_barcode }}" readonly>
+            <button class="btn btn-outline-primary" type="button" onclick="copiarBarcode()">
+              <i class="bi bi-clipboard"></i> Copiar
+            </button>
+          </div>
+        {% endif %}
+
+        {% if pagamento.boleto_url %}
+          <div class="d-grid mb-3">
+            <a href="{{ pagamento.boleto_url }}" target="_blank" class="btn btn-primary btn-lg">
+              <i class="bi bi-file-pdf me-1"></i> Abrir / Baixar Boleto PDF
+            </a>
+          </div>
+        {% endif %}
+
+        <div class="alert alert-light mb-0">
+          <div class="small text-muted mb-1">Número de Inscrição (provisório)</div>
+          <span class="numero-inscricao">{{ pagamento.candidatura.numero_inscricao }}</span>
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="{% url 'minhas_candidaturas' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-list-check me-1"></i>Acompanhar em Minhas Candidaturas
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function copiarPix() {
+  const el = document.getElementById('pixCode');
+  navigator.clipboard.writeText(el.value).then(() => {
+    document.getElementById('copyIcon').className = 'bi bi-clipboard-check';
+    setTimeout(() => { document.getElementById('copyIcon').className = 'bi bi-clipboard'; }, 2000);
+  });
+}
+function copiarBarcode() {
+  navigator.clipboard.writeText(document.getElementById('barcodeInput').value);
+}
+</script>
+{% endblock %}

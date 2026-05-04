@@ -1,0 +1,434 @@
+/* ============================================================
+   VARIÁVEIS E BASE
+   ============================================================ */
+:root {
+  --primary: #1a56db;
+  --primary-dark: #1341a6;
+  --primary-light: #e8f0fe;
+  --success: #0e9f6e;
+  --danger: #e02424;
+  --warning: #c27803;
+  --info: #0694a2;
+  --dark: #111827;
+  --gray: #6b7280;
+  --gray-light: #f3f4f6;
+  --border: #e5e7eb;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+  --radius: .5rem;
+  --radius-lg: .75rem;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: #f0f4f8;
+  color: var(--dark);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: .9375rem;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main.container { flex: 1; }
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--gray-light); }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+  background: linear-gradient(135deg, #1a56db 0%, #1341a6 100%) !important;
+  box-shadow: 0 2px 12px rgba(26,86,219,.3);
+  padding: .75rem 0;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.5px;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.navbar-brand i { font-size: 1.4rem; }
+
+.navbar .nav-link {
+  color: rgba(255,255,255,.85) !important;
+  font-weight: 500;
+  padding: .4rem .75rem;
+  border-radius: var(--radius);
+  transition: background .2s, color .2s;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  background: rgba(255,255,255,.15);
+  color: #fff !important;
+}
+
+.navbar .dropdown-menu {
+  border: none;
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius);
+  min-width: 200px;
+  padding: .5rem;
+}
+
+.navbar .dropdown-item {
+  border-radius: calc(var(--radius) - 2px);
+  padding: .5rem .75rem;
+  transition: background .15s;
+}
+
+.navbar .dropdown-item:hover { background: var(--primary-light); color: var(--primary); }
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  background: #fff;
+  transition: box-shadow .2s, transform .2s;
+}
+
+.card:hover { box-shadow: var(--shadow); }
+
+.card-body { padding: 1.5rem; }
+
+.card-title { font-weight: 700; color: var(--dark); }
+
+/* Card de concurso */
+.card-concurso {
+  border-left: 4px solid var(--primary);
+  transition: box-shadow .2s, transform .2s, border-color .2s;
+}
+
+.card-concurso:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-left-color: var(--success);
+}
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+.btn {
+  font-weight: 500;
+  border-radius: var(--radius);
+  transition: all .2s;
+  padding: .45rem 1rem;
+}
+
+.btn-lg { padding: .65rem 1.5rem; font-size: 1rem; }
+.btn-sm { padding: .3rem .75rem; font-size: .8rem; }
+
+.btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26,86,219,.35);
+}
+
+.btn-success:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14,159,110,.35);
+}
+
+.btn-warning:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(194,120,3,.3);
+}
+
+.btn-outline-primary:hover { transform: translateY(-1px); }
+.btn-outline-secondary:hover { transform: translateY(-1px); }
+
+/* ============================================================
+   FORMULÁRIOS
+   ============================================================ */
+.form-control,
+.form-select {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: .55rem .85rem;
+  transition: border-color .2s, box-shadow .2s;
+  background-color: #fff;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(26,86,219,.15);
+  outline: none;
+}
+
+.form-control.is-invalid { border-color: var(--danger); }
+.form-control.is-invalid:focus { box-shadow: 0 0 0 3px rgba(224,36,36,.15); }
+
+.form-label { font-weight: 600; font-size: .875rem; color: #374151; margin-bottom: .3rem; }
+
+.invalid-feedback { font-size: .8rem; }
+
+/* Seção de formulário */
+.form-section {
+  background: var(--gray-light);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--border);
+}
+
+.form-section-title {
+  font-size: .875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+/* ============================================================
+   BADGES / TAGS
+   ============================================================ */
+.badge {
+  font-size: .7rem;
+  font-weight: 600;
+  padding: .3em .6em;
+  border-radius: 999px;
+  letter-spacing: .03em;
+}
+
+.badge-status-aberto    { background: #d1fae5; color: #065f46; }
+.badge-status-rascunho  { background: #f3f4f6; color: #374151; }
+.badge-status-encerrado { background: #fee2e2; color: #991b1b; }
+.badge-status-suspenso  { background: #fef3c7; color: #92400e; }
+
+/* ============================================================
+   PAGAMENTO — SELETOR DE MÉTODO
+   ============================================================ */
+.metodo-pagamento-label {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color .2s, background .2s, transform .15s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+}
+
+.metodo-pagamento-label:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.btn-check:checked + .metodo-pagamento-label {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.metodo-pagamento-label .icone { font-size: 2.5rem; }
+
+/* ============================================================
+   ALERTAS
+   ============================================================ */
+.alert {
+  border: none;
+  border-radius: var(--radius);
+  border-left: 4px solid;
+  padding: .85rem 1.1rem;
+  font-size: .9rem;
+}
+
+.alert-success { background: #d1fae5; border-left-color: var(--success); color: #065f46; }
+.alert-danger   { background: #fee2e2; border-left-color: var(--danger);  color: #991b1b; }
+.alert-warning  { background: #fef3c7; border-left-color: var(--warning); color: #92400e; }
+.alert-info     { background: #e0f2f1; border-left-color: var(--info);    color: #134e4a; }
+
+/* ============================================================
+   TABELAS
+   ============================================================ */
+.table { border-collapse: separate; border-spacing: 0; }
+.table th { font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--gray); font-weight: 600; border-bottom: 2px solid var(--border); padding: .75rem 1rem; }
+.table td { padding: .85rem 1rem; vertical-align: middle; border-bottom: 1px solid var(--border); }
+.table-hover tbody tr:hover { background: var(--primary-light); }
+.table tbody tr:last-child td { border-bottom: none; }
+
+/* ============================================================
+   SIDEBAR DE FILTROS
+   ============================================================ */
+.sidebar-filtros {
+  position: sticky;
+  top: 1rem;
+}
+
+.sidebar-filtros .card-body { padding: 1rem; }
+
+/* ============================================================
+   PÁGINA DE DETALHE DO CONCURSO
+   ============================================================ */
+.info-box {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .9rem;
+  color: #374151;
+}
+
+.info-item i { color: var(--primary); width: 1.1rem; flex-shrink: 0; }
+.info-item strong { font-weight: 600; }
+
+/* ============================================================
+   CARTÃO DE INSCRIÇÃO (lateral)
+   ============================================================ */
+.card-inscricao {
+  border: none;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  border-radius: var(--radius-lg);
+}
+
+.card-inscricao .card-body { padding: 1.5rem; }
+.card-inscricao .info-item { color: rgba(255,255,255,.9); }
+.card-inscricao .info-item i { color: rgba(255,255,255,.7); }
+.card-inscricao .taxa-valor { font-size: 2rem; font-weight: 700; }
+.card-inscricao .btn-inscrever {
+  background: #fff;
+  color: var(--primary);
+  font-weight: 700;
+  border: none;
+  width: 100%;
+  padding: .75rem;
+}
+.card-inscricao .btn-inscrever:hover {
+  background: var(--primary-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+
+/* ============================================================
+   PIX QR CODE
+   ============================================================ */
+.qrcode-container {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: inline-block;
+}
+
+.qrcode-container img { max-width: 220px; }
+
+/* ============================================================
+   HERO / BANNER
+   ============================================================ */
+.hero-banner {
+  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-banner h1 { font-weight: 800; font-size: 2rem; }
+.hero-banner p { opacity: .85; font-size: 1.05rem; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: #fff;
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0;
+  margin-top: auto;
+}
+
+/* ============================================================
+   LOADING SPINNER
+   ============================================================ */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: .8;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  right: .75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+}
+
+@keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+/* ============================================================
+   UTILITÁRIOS
+   ============================================================ */
+.text-primary { color: var(--primary) !important; }
+.bg-primary-light { background: var(--primary-light); }
+.border-primary { border-color: var(--primary) !important; }
+.fw-600 { font-weight: 600; }
+.fs-sm { font-size: .85rem; }
+.rounded-lg { border-radius: var(--radius-lg) !important; }
+.gap-2 { gap: .5rem; }
+
+/* ============================================================
+   NÚMERO DE INSCRIÇÃO
+   ============================================================ */
+.numero-inscricao {
+  font-family: 'Courier New', monospace;
+  background: var(--gray-light);
+  padding: .25rem .5rem;
+  border-radius: .25rem;
+  font-size: .85rem;
+  letter-spacing: .05em;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .hero-banner h1 { font-size: 1.5rem; }
+  .card-body { padding: 1rem; }
+  .table th, .table td { padding: .5rem .75rem; }
+  .navbar-brand { font-size: 1rem; }
+}

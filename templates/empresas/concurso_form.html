@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{% if concurso %}Editar{% else %}Novo{% endif %} Concurso{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body p-4">
+    <h3 class="mb-4">{% if concurso %}Editar: {{ concurso.titulo }}{% else %}Novo Concurso{% endif %}</h3>
+    <form method="post">
+      {% csrf_token %}
+      <h5 class="text-primary">Dados do Concurso</h5>
+      {{ form|crispy }}
+
+      <h5 class="text-primary mt-4">Cargos</h5>
+      {{ cargo_formset.management_form }}
+      {% for cform in cargo_formset %}
+        <div class="border rounded p-3 mb-3 bg-light">
+          <div class="d-flex justify-content-between">
+            <strong>Cargo {{ forloop.counter }}</strong>
+            {% if cform.DELETE %}
+              <div class="form-check">
+                {{ cform.DELETE }} <label class="form-check-label text-danger">Remover</label>
+              </div>
+            {% endif %}
+          </div>
+          {{ cform|crispy }}
+        </div>
+      {% endfor %}
+
+      <div class="d-grid mt-4">
+        <button type="submit" class="btn btn-primary btn-lg">Salvar Concurso</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

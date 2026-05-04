@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+  <div class="col-md-5 col-lg-4">
+    <div class="text-center mb-4">
+      <i class="bi bi-award-fill text-primary" style="font-size:2.5rem"></i>
+      <h4 class="fw-700 mt-2">Acesse sua conta</h4>
+      <p class="text-muted small">ConcursosBR — Sua plataforma de concursos</p>
+    </div>
+    <div class="card shadow">
+      <div class="card-body p-4">
+        <form method="post" id="loginForm">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg" id="btnLogin">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Entrar
+            </button>
+          </div>
+        </form>
+        <div class="text-center mt-3">
+          <a href="{% url 'solicitar_redefinicao_senha' %}" class="text-muted small">
+            <i class="bi bi-key me-1"></i>Esqueci minha senha
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body py-3 text-center">
+        <p class="mb-2 small text-muted">Não tem conta?</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <a href="{% url 'cadastro_candidato' %}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-person-plus me-1"></i>Sou Candidato
+          </a>
+          <a href="{% url 'cadastro_empresa' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-building me-1"></i>Sou Empresa
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('loginForm').addEventListener('submit', function() {
+  document.getElementById('btnLogin').classList.add('btn-loading');
+});
+</script>
+{% endblock %}

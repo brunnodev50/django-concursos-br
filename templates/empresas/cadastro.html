@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Cadastro de Empresa{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h2 class="mb-4"><i class="bi bi-building-add"></i> Cadastro de Empresa</h2>
+        <form method="post">
+          {% csrf_token %}
+          <h5 class="text-primary">Acesso</h5>
+          {{ user_form|crispy }}
+          <h5 class="text-primary mt-4">Dados da Empresa</h5>
+          {{ empresa_form|crispy }}
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">Cadastrar Empresa</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

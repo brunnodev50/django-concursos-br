@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Publicar Edital{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h4 class="mb-3">Publicar Edital — {{ concurso.titulo }}</h4>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-info">Publicar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

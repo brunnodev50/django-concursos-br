@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Confirmar Inscrição{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h4 class="mb-3"><i class="bi bi-pencil-square"></i> Confirmar Inscrição</h4>
+        <div class="alert alert-info">
+          <strong>{{ concurso.titulo }}</strong><br>
+          {{ concurso.orgao }} — {{ concurso.cidade }}/{{ concurso.estado }}<br>
+          Taxa: <strong>R$ {{ concurso.taxa_inscricao }}</strong>
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-success btn-lg">Confirmar e ir para Pagamento</button>
+          </div>
+        </form>
+        <div class="text-center mt-2">
+          <a href="{% url 'detalhe_concurso' concurso.pk %}">Cancelar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Pagamento{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7 col-lg-5">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'minhas_candidaturas' %}">Candidaturas</a></li>
+        <li class="breadcrumb-item active">Pagamento</li>
+      </ol>
+    </nav>
+
+    <div class="card shadow mb-4">
+      <div class="card-body p-0">
+        <div class="p-4 border-bottom bg-primary-light rounded-top">
+          <h5 class="fw-700 mb-1">{{ candidatura.concurso.titulo }}</h5>
+          <p class="text-muted small mb-0">
+            <i class="bi bi-building me-1"></i>{{ candidatura.concurso.orgao }}
+            &bull; {{ candidatura.concurso.cidade }}/{{ candidatura.concurso.estado }}
+          </p>
+          {% if candidatura.cargo %}
+            <div class="mt-2">
+              <span class="badge bg-white text-primary border">{{ candidatura.cargo.nome }}</span>
+            </div>
+          {% endif %}
+        </div>
+        <div class="p-4 text-center">
+          <div class="text-muted small mb-1">Valor da Taxa de Inscrição</div>
+          <div class="fw-700 text-success" style="font-size:2.2rem">
+            R$ {{ candidatura.concurso.taxa_inscricao }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-body p-4">
+        <h6 class="fw-700 mb-4 text-center">Escolha a forma de pagamento</h6>
+        <form method="post" id="paymentForm">
+          {% csrf_token %}
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <input type="radio" class="btn-check" name="metodo" id="pix" value="pix" required>
+              <label class="metodo-pagamento-label w-100" for="pix">
+                <i class="bi bi-qr-code-scan icone text-success"></i>
+                <strong>PIX</strong>
+                <small class="text-muted">Aprovação imediata</small>
+                <small class="text-success fw-600">Recomendado</small>
+              </label>
+            </div>
+            <div class="col-6">
+              <input type="radio" class="btn-check" name="metodo" id="boleto" value="boleto">
+              <label class="metodo-pagamento-label w-100" for="boleto">
+                <i class="bi bi-upc-scan icone text-primary"></i>
+                <strong>Boleto</strong>
+                <small class="text-muted">3 dias úteis</small>
+                <small class="text-muted">para vencimento</small>
+              </label>
+            </div>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success btn-lg" id="btnPagar">
+              <i class="bi bi-lock-fill me-1"></i> Gerar Pagamento
+            </button>
+          </div>
+          <p class="text-center text-muted small mt-3">
+            <i class="bi bi-shield-check me-1"></i>Pagamento seguro via Mercado Pago
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('paymentForm').addEventListener('submit', function(e) {
+  const metodo = document.querySelector('input[name="metodo"]:checked');
+  if (!metodo) { e.preventDefault(); alert('Selecione um método de pagamento.'); return; }
+  document.getElementById('btnPagar').classList.add('btn-loading');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Concursos Abertos{% endblock %}
+{% block nav_concursos %}active{% endblock %}
+
+{% block content %}
+
+{% if not user.is_authenticated %}
+<div class="hero-banner mb-4">
+  <div class="row align-items-center">
+    <div class="col-md-8">
+      <h1><i class="bi bi-award"></i> Concursos Públicos</h1>
+      <p class="mb-3">Encontre seu concurso ideal, candidate-se e acompanhe tudo em um só lugar.</p>
+      <a href="{% url 'cadastro_candidato' %}" class="btn btn-light text-primary fw-600 me-2">
+        <i class="bi bi-person-plus"></i> Criar Conta Grátis
+      </a>
+      <a href="{% url 'login' %}" class="btn btn-outline-light">
+        <i class="bi bi-box-arrow-in-right"></i> Entrar
+      </a>
+    </div>
+    <div class="col-md-4 text-end d-none d-md-block">
+      <i class="bi bi-journal-text" style="font-size:6rem;opacity:.3"></i>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="row g-4">
+  <!-- FILTROS -->
+  <div class="col-md-3">
+    <div class="card sidebar-filtros">
+      <div class="card-body">
+        <h6 class="fw-700 mb-3 d-flex align-items-center gap-2">
+          <i class="bi bi-funnel-fill text-primary"></i> Filtrar Concursos
+        </h6>
+        <form method="get" id="filtroForm">
+          {{ form|crispy }}
+          <div class="d-grid gap-2 mt-3">
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+            <a href="{% url 'lista_concursos' %}" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-x-circle"></i> Limpar filtros
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTAGEM -->
+  <div class="col-md-9">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="mb-0 fw-700">
+        Concursos em Aberto
+        <span class="badge bg-primary ms-2">{{ total }}</span>
+      </h5>
+    </div>
+
+    {% if concursos %}
+      {% for concurso in concursos %}
+        <div class="card card-concurso mb-3">
+          <div class="card-body">
+            <div class="row align-items-start">
+              <div class="col-md-8">
+                <h5 class="card-title mb-1">
+                  <a href="{% url 'detalhe_concurso' concurso.pk %}" class="text-dark text-decoration-none stretched-link-workaround">
+                    {{ concurso.titulo }}
+                  </a>
+                </h5>
+                <p class="text-muted small mb-2">
+                  <i class="bi bi-building me-1"></i>{{ concurso.orgao }}
+                  &nbsp;&bull;&nbsp;
+                  <i class="bi bi-geo-alt me-1"></i>{{ concurso.cidade }}/{{ concurso.estado }}
+                </p>
+                <p class="text-muted small mb-0 d-none d-md-block">
+                  {{ concurso.descricao|truncatechars:120 }}
+                </p>
+              </div>
+              <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <div class="d-flex flex-column align-items-md-end gap-2">
+                  <span class="badge badge-status-aberto fs-sm">
+                    <i class="bi bi-circle-fill" style="font-size:.5rem"></i> Aberto
+                  </span>
+                  <div class="text-muted small">
+                    <i class="bi bi-people me-1"></i>{{ concurso.vagas_total }} vagas
+                  </div>
+                  <div class="fw-600 text-success">
+                    R$ {{ concurso.taxa_inscricao }}
+                  </div>
+                  <div class="text-muted small">
+                    <i class="bi bi-calendar-x me-1"></i>Até {{ concurso.data_fechamento|date:"d/m/Y" }}
+                  </div>
+                  <a href="{% url 'detalhe_concurso' concurso.pk %}" class="btn btn-primary btn-sm mt-1">
+                    Ver detalhes <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+      <!-- PAGINAÇÃO -->
+      {% if page_obj.has_other_pages %}
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.cidade %}&cidade={{ request.GET.cidade }}{% endif %}">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+              <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.cidade %}&cidade={{ request.GET.cidade }}{% endif %}">{{ num }}</a>
+              </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}{% if request.GET.cidade %}&cidade={{ request.GET.cidade }}{% endif %}">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      {% endif %}
+
+    {% else %}
+      <div class="card text-center py-5">
+        <div class="card-body">
+          <i class="bi bi-search text-muted" style="font-size:3rem"></i>
+          <h5 class="mt-3 text-muted">Nenhum concurso encontrado</h5>
+          <p class="text-muted small">Tente outros filtros ou volte mais tarde.</p>
+          <a href="{% url 'lista_concursos' %}" class="btn btn-outline-primary">
+            <i class="bi bi-x-circle"></i> Limpar filtros
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
