@@ -15,13 +15,14 @@ Sistema web completo desenvolvido em **Django + SQLite** para cadastro, publica�
 7. [Instalação](#instalação)
 8. [Configuração do .env](#configuração-do-env)
 9. [Rodando o Projeto](#rodando-o-projeto)
-10. [Criando o Superusuário](#criando-o-superusuário)
-11. [Painel Administrativo](#painel-administrativo)
-12. [Rotas do Sistema](#rotas-do-sistema)
-13. [Modelos de Dados](#modelos-de-dados)
-14. [Integrações Externas](#integrações-externas)
-15. [Deploy em Produção](#deploy-em-produção)
-16. [Perguntas Frequentes](#perguntas-frequentes)
+10. [Rodando com Docker](#rodando-com-docker)
+11. [Criando o Superusuário](#criando-o-superusuário)
+12. [Painel Administrativo](#painel-administrativo)
+13. [Rotas do Sistema](#rotas-do-sistema)
+14. [Modelos de Dados](#modelos-de-dados)
+15. [Integrações Externas](#integrações-externas)
+16. [Deploy em Produção](#deploy-em-produção)
+17. [Perguntas Frequentes](#perguntas-frequentes)
 
 ---
 
@@ -680,6 +681,100 @@ python manage.py check
 python manage.py makemigrations
 python manage.py migrate
 ```
+
+---
+
+## Rodando com Docker
+
+O projeto inclui dois arquivos Docker Compose: um para desenvolvimento e outro para produção.
+
+### Pré-requisitos
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e em execução.
+
+---
+
+### Desenvolvimento (com `runserver`)
+
+```bash
+# Clonar o repositório (se ainda não fez)
+git clone https://github.com/brunnodev50/django-concursos-br.git
+cd django-concursos-br
+
+# Copiar o arquivo de variáveis de ambiente
+copy .env.example .env      # Windows
+cp .env.example .env         # Linux/macOS
+
+# Subir os containers (web + redis)
+docker-compose -f docker-compose.dev.yml up
+```
+
+O servidor estará disponível em `http://localhost:8000`
+
+Para rodar em segundo plano (detached):
+
+```bash
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+---
+
+### Produção (com Gunicorn)
+
+```bash
+# Subir os containers em segundo plano (web + redis + celery)
+docker-compose up -d
+```
+
+O servidor estará disponível em `http://localhost:8000`
+
+---
+
+### Criando o superusuário dentro do container
+
+```bash
+# Desenvolvimento
+docker-compose -f docker-compose.dev.yml exec web python manage.py createsuperuser
+
+# Produção
+docker-compose exec web python manage.py createsuperuser
+```
+
+---
+
+### Executando migrations dentro do container
+
+```bash
+# Desenvolvimento
+docker-compose -f docker-compose.dev.yml exec web python manage.py migrate
+
+# Produção
+docker-compose exec web python manage.py migrate
+```
+
+---
+
+### Parando os containers
+
+```bash
+# Parar e remover containers
+docker-compose down
+
+# Parar sem remover (mantém dados)
+docker-compose stop
+```
+
+---
+
+### Variáveis de ambiente no Docker
+
+As variáveis são lidas do arquivo `.env` na raiz do projeto. Certifique-se de configurar ao menos:
+
+| Variável | Descrição |
+|---|---|
+| `SECRET_KEY` | Chave secreta do Django |
+| `DEBUG` | `True` para dev, `False` para prod |
+| `ALLOWED_HOSTS` | Domínios permitidos (ex: `localhost,127.0.0.1`) |
 
 ---
 
