@@ -11,3 +11,4 @@ staticfiles/
 venv/
 *.log
 .DS_Store
+.dockerignore
